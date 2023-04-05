@@ -1,0 +1,44 @@
+service: finniu-integrations
+
+frameworkVersion: '3'
+
+custom:
+  wsgi:
+    app: src.app.app
+  pythonRequirements:
+    fileName: requirements.txt
+    dockerizePip: false
+  dotenv:
+    exclude:
+      - AWS_ACCESS_KEY_ID
+      - AWS_SECRET_ACCESS_KEY
+
+useDotenv: true
+
+provider:
+  name: aws
+  runtime: python3.9
+  stage: ${opt.stage}
+  region: us-east-2
+  memorySize: 128
+  environment:
+    STAGE: ${env:STAGE}
+  #   REGION: ${env:REGION}
+  
+functions:
+  api:
+    handler: wsgi_handler.handler
+    events:
+      - httpApi: '*'
+
+plugins:
+  - serverless-wsgi
+  - serverless-python-requirements
+  - serverless-dotenv-plugin
+package:
+  exclude:
+    - "node_modules/**"
+    - "*.md"
+    - "package-lock.json"
+  include:
+    - "src/**"
