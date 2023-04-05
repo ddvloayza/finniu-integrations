@@ -25,3 +25,4 @@ node_modules/
 .serverless-wsgi
 docker/
 package-lock.json
+.DS_Store

@@ -6,8 +6,10 @@ custom:
   wsgi:
     app: src.app.app
   pythonRequirements:
-    fileName: requirements.txt
-    dockerizePip: false
+    dockerizePip: non-linux
+    dockerSsh: true
+    slim: false
+
   dotenv:
     exclude:
       - AWS_ACCESS_KEY_ID
@@ -18,11 +20,10 @@ useDotenv: true
 provider:
   name: aws
   runtime: python3.9
-  stage: ${opt.stage}
+  stage: prod
   region: us-east-2
   memorySize: 128
-  environment:
-    STAGE: ${env:STAGE}
+  timeout: 15
   #   REGION: ${env:REGION}
   
 functions:
@@ -30,6 +31,8 @@ functions:
     handler: wsgi_handler.handler
     events:
       - httpApi: '*'
+    layers:
+      - arn:aws:lambda:us-east-2:347599033421:layer:wkhtmltopdf-0_12_6:1
 
 plugins:
   - serverless-wsgi
