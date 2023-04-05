@@ -17,7 +17,7 @@ AWS_S3 = f"https://{BUCKET}.s3.us-east-2.amazonaws.com/"
 app = Flask(__name__)
 LAMBDA_TASK_ROOT = os.environ.get('LAMBDA_TASK_ROOT', os.path.dirname(os.path.abspath(__file__)))
 
-WKHTMLTOPDF_PATH = '/opt/bin/wkhtmltopdf'
+WKHTMLTOPDF_PATH = os.environ['WKHTMLPDF_PATH']
 config = pdfkit.configuration(wkhtmltopdf=WKHTMLTOPDF_PATH)
 
 
@@ -29,16 +29,13 @@ def build_pdf():
         'encoding': 'UTF-8',
         'enable-local-file-access': True
     }
-    print("configuration", WKHTMLTOPDF_PATH)
     pdf_value = pdfkit.from_string(html, False, options=options, configuration=config)
     uuid = data.get("uuid")
     filename = data.get("filename")
     random_str = generate_random_letter()
     filename_key = f"{date_string()}/{filename}-{uuid}-{random_str}.pdf"
     file_url = f"{AWS_S3}{filename_key}"
-    print('filename_key', filename_key, file_url)
     s3_client.put_object(Body=pdf_value, Bucket=BUCKET, ContentType="application/pdf", Key=filename_key, ACL='public-read')
-    print("upload")
     ContractUpdate.execute(uuid, file_url)
     return jsonify(message='success', url=file_url)
 
