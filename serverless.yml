@@ -33,7 +33,10 @@ functions:
       - httpApi: '*'
     layers:
       - arn:aws:lambda:us-east-2:347599033421:layer:wkhtmltopdf-0_12_6:1
-
+  rateHandler:
+    handler: cron.run
+    events:
+      - schedule: rate(1 minute)
 plugins:
   - serverless-wsgi
   - serverless-python-requirements
