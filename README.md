@@ -129,3 +129,11 @@ serverless wsgi serve
 ```
 
 For additional local development capabilities of `serverless-wsgi` plugin, please refer to corresponding [GitHub repository](https://github.com/logandk/serverless-wsgi).
+
+
+## pyenv 
+pyenv virtualenv 3.9 venv
+
+pyenv activate venv
+
+pip install -r requirements.txt
