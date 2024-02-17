@@ -1,0 +1,42 @@
+name: Deploy to AWS
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      - name: Install Node.js
+        uses: actions/setup-node@v2
+        with:
+          node-version: '21'
+      - name: Install Serverless Framework
+        run: npm install -g serverless
+
+      - name: Create .env file
+        run: |
+          echo "AWS_ID=${{ secrets.AWS_ACCESS_KEY_ID }}" >> .env
+          echo "AWS_ACCESS_KEY_ID=${{ secrets.AWS_ACCESS_KEY_ID }}" >> .env
+          echo "AWS_KEY=${{ secrets.AWS_KEY }}" >> .env
+          echo "AWS_SECRET_ACCESS_KEY=${{ secrets.AWS_SECRET_ACCESS_KEY }}" >> .env
+          echo "REGION=${{ secrets.REGION }}" >> .env
+          echo "FINNIU_HOST=${{ secrets.FINNIU_HOST }}" >> .env
+          echo "FINNIU_USERNAME=${{ secrets.FINNIU_USERNAME }}" >> .env
+          echo "FINNIU_DB=${{ secrets.FINNIU_DB }}" >> .env
+          echo "FINNIU_PASSWORD=${{ secrets.FINNIU_PASSWORD }}" >> .env
+          echo "FINNIU_PORT=${{ secrets.FINNIU_PORT }}" >> .env
+          echo "STAGE=${{ secrets.STAGE }}" >> .env
+          echo "WKHTMLPDF_PATH=${{ secrets.WKHTMLPDF_PATH }}" >> .env
+          echo "WKHTMLPDF_LAYER_ARN=${{ secrets.WKHTMLPDF_LAYER_ARN }}" >> .env
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Deploy with Serverless Framework
+        run: sls deploy --stage prod

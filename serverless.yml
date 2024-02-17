@@ -6,11 +6,10 @@ custom:
   wsgi:
     app: src.app.app
   pythonRequirements:
-    dockerizePip: non-linux
-    dockerSsh: true
-    slim: false
+    dockerizePip: true
 
   dotenv:
+    basePath: ./
     exclude:
       - AWS_ACCESS_KEY_ID
       - AWS_SECRET_ACCESS_KEY
@@ -20,23 +19,11 @@ useDotenv: true
 provider:
   name: aws
   runtime: python3.9
-  stage: prod
-  region: us-east-2
-  memorySize: 128
-  timeout: 15
-  #   REGION: ${env:REGION}
+  stage: ${opt:stage}
+  region: ${env:REGION}
+  memorySize: 512
+  timeout: 30
   
-functions:
-  api:
-    handler: wsgi_handler.handler
-    events:
-      - httpApi: '*'
-    layers:
-      - arn:aws:lambda:us-east-2:347599033421:layer:wkhtmltopdf-0_12_6:1
-  rateHandler:
-    handler: cron.run
-    events:
-      - schedule: rate(1 minute)
 plugins:
   - serverless-wsgi
   - serverless-python-requirements
@@ -48,3 +35,15 @@ package:
     - "package-lock.json"
   include:
     - "src/**"
+
+functions:
+  api:
+    handler: wsgi_handler.handler
+    events:
+      - httpApi: '*'
+    layers:
+      - arn:aws:lambda:${env:WKHTMLPDF_LAYER_ARN}
+  rateHandler:
+    handler: cron.run
+    events:
+      - schedule: rate(1 minute)
