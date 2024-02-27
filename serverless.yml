@@ -46,5 +46,4 @@ functions:
   rateHandler:
     handler: cron.run
     events:
-      - schedule:
-          cron: '0 9 * * ? *'
+      - schedule: cron(0 9 * * ? *)
