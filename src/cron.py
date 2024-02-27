@@ -2,5 +2,8 @@
 def handler(event, context):
     print("event", event)
     print("context", context)
-    return "hola"
+    return {
+        'statusCode': 200,
+        'body': 'Ejecución exitosa'
+    }
 
