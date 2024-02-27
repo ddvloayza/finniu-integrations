@@ -44,6 +44,6 @@ functions:
     layers:
       - arn:aws:lambda:${env:WKHTMLPDF_LAYER_ARN}
   rateHandler:
-    handler: cron.run
+    handler: cron.handler
     events:
       - schedule: cron(0 9 * * ? *)
