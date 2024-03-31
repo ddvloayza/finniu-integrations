@@ -1,6 +1,6 @@
 service: finniu-integrations
 
-frameworkVersion: '3'
+frameworkVersion: "3"
 
 custom:
   wsgi:
@@ -23,7 +23,7 @@ provider:
   region: ${env:REGION}
   memorySize: 512
   timeout: 30
-  
+
 plugins:
   - serverless-wsgi
   - serverless-python-requirements
@@ -40,10 +40,10 @@ functions:
   api:
     handler: wsgi_handler.handler
     events:
-      - httpApi: '*'
+      - httpApi: "*"
     layers:
       - arn:aws:lambda:${env:WKHTMLPDF_LAYER_ARN}
   rateHandler:
-    handler: cron.handler
+    handler: src.cron.handler
     events:
       - schedule: rate(1 minute)
