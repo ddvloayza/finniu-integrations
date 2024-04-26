@@ -5,6 +5,8 @@ import boto3
 import os
 from .services import ContractUpdate
 from .utils import generate_random_letter, date_string
+from .services import PreInvestment
+
 
 s3_client = boto3.client(
     's3',
@@ -39,6 +41,10 @@ def build_pdf():
     ContractUpdate.execute(uuid, file_url)
     return jsonify(message='success', url=file_url)
 
+@app.route("/purge-pre-investments", methods=['POST'])
+def purge_pre_investments():
+    list_pre_investments = PreInvestment.execute('draft', 100)
+    return jsonify(message='success', data=list_pre_investments)
 
 def handler(event, context):
     return serverless_wsgi.handle_request(app, event, context)
