@@ -43,7 +43,7 @@ functions:
       - httpApi: "*"
     layers:
       - arn:aws:lambda:${env:WKHTMLPDF_LAYER_ARN}
-  rateHandler:
-    handler: src.cron.handler
+  purge-pre-investments:
+    handler: functions.purge_pre_investments
     events:
-      - schedule: rate(1 minute)
+      - httpApi: "*"

@@ -1,12 +1,16 @@
-import json
-from datetime import datetime
+import serverless_wsgi
+from .services import PreInvestment
+from flask import Flask, jsonify, make_response, request
 
 
+app = Flask(__name__)
+
+@app.route("/purge-pre-investments", methods=['POST'])
+def purge_pre_investments():
+    list_pre_investments = PreInvestment.execute('draft', 100)
+    return jsonify(message='success', data=list_pre_investments)
 def handler(event, context):
-    current_time = datetime.now().isoformat()
-    print(f"The current time is {current_time}")
-    return {
-        'statusCode': 200,
-        'body': json.dumps(f"The current time is {current_time}")
-    }
+    return serverless_wsgi.handle_request(app, event, context)
+
+
 
