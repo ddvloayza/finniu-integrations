@@ -13,9 +13,3 @@ def purge_pre_investments(event, context):
     except Exception as e:
         logger.exception("Failed Lambda ***purge_pre_investments", e)
     return success
-
-
-if __name__ == "__main__":
-    event = {}
-    context = {}
-    purge_pre_investments(event, context)
