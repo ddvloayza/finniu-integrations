@@ -43,9 +43,4 @@ functions:
       - httpApi: "*"
     layers:
       - arn:aws:lambda:${env:WKHTMLPDF_LAYER_ARN}
-  purge-pre-investments:
-    handler: src.cron.handler
-    events:
-      - httpApi:
-          path: /purge-pre-investments
-          method: "*"
+
