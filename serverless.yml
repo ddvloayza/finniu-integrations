@@ -43,4 +43,7 @@ functions:
       - httpApi: "*"
     layers:
       - arn:aws:lambda:${env:WKHTMLPDF_LAYER_ARN}
-
+  dailyCron:
+    handler: src.cron.handler
+    events:
+      - schedule: rate(5 minutes)
