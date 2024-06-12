@@ -47,3 +47,7 @@ functions:
     handler: src.cron.handler
     events:
       - schedule: rate(5 minutes)
+  draftCron:
+    handler: src.functions.draft_pre_investments
+    events:
+      - schedule: rate(5 minutes)

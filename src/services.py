@@ -17,6 +17,13 @@ class ContractUpdate:
 class PreInvestment:
 
     @classmethod
+    def execute_get_pre_investment(cls, status, limit):
+        db = FinniuDB()
+        __pre_investment = db.get_list(query_get_pre_investments(status, limit))
+        print("__pre_investment", __pre_investment)
+        db.close()
+
+    @classmethod
     def execute(cls, status, limit):
         db = FinniuDB()
         __pre_investment = db.get_list(query_get_pre_investments(status, limit))
