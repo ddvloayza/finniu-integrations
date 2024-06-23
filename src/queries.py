@@ -37,3 +37,4 @@ def query_create_disable_preinvestment(
             is_active
         ) VALUES {', '.join(data)}
     """
+

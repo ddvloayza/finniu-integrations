@@ -43,11 +43,11 @@ functions:
       - httpApi: "*"
     layers:
       - arn:aws:lambda:${env:WKHTMLPDF_LAYER_ARN}
-  dailyCron:
-    handler: src.cron.handler
+  dailyCronReinvestment:
+    handler: src.functions.activate_re_investments
     events:
-      - schedule: rate(5 minutes)
+      - schedule: cron(0 0 * * ? *)
   draftCron:
     handler: src.functions.draft_pre_investments
     events:
-      - schedule: rate(5 minutes)
+      - schedule: cron(0 0 * * ? *)

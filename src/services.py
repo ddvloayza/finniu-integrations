@@ -1,8 +1,16 @@
 from .db import FinniuDB
-from .queries import query_contract_update, query_get_pre_investments, query_create_disable_preinvestment
+from .investment.queries import query_create_investment, query_get_last_investments
+from .queries import (
+    query_contract_update,
+    query_get_pre_investments,
+    query_create_disable_preinvestment
+)
 from decimal import Decimal
 from datetime import datetime
 import uuid
+
+from .re_investment.queries import query_get_re_investments, query_activate_pre_investment, \
+    query_update_is_active_re_investment
 
 
 class ContractUpdate:
@@ -13,6 +21,48 @@ class ContractUpdate:
         db.update(query_contract_update(contract_uuid, file_url))
         db.close()
 
+class Investment:
+    @classmethod
+    def execute_create_investment(cls, uuid, operation_code, pre_investment_id, start_investment, end_investment, created_at):
+        db = FinniuDB()
+        db.insert(
+            query_create_investment(
+                uuid,
+                operation_code,
+                pre_investment_id,
+                start_investment,
+                end_investment,
+                created_at
+            )
+        )
+        db.close()
+
+    @classmethod
+    def execute_get_last_investments(cls, limit):
+        db = FinniuDB()
+        __investments = db.get_list(query_get_last_investments(limit))
+        db.close()
+        return __investments
+
+class Reinvestment:
+    @classmethod
+    def execute_get_end_reinvestment(cls, limit):
+        db = FinniuDB()
+        __re_investments = db.get_list(query_get_re_investments(limit))
+        db.close()
+        return __re_investments
+
+    @classmethod
+    def execute_update_active_re_investment(cls, uuid, is_active):
+        db = FinniuDB()
+        db.update(query_update_is_active_re_investment(uuid, is_active))
+        db.close()
+
+    @classmethod
+    def execute_activate_pre_investment(cls, uuid):
+        db = FinniuDB()
+        __activate = db.update(query_activate_pre_investment(uuid))
+        db.close()
 
 class PreInvestment:
 
@@ -20,14 +70,12 @@ class PreInvestment:
     def execute_get_pre_investment(cls, status, limit):
         db = FinniuDB()
         __pre_investment = db.get_list(query_get_pre_investments(status, limit))
-        print("___pre_investment", __pre_investment)
         db.close()
 
     @classmethod
     def execute(cls, status, limit):
         db = FinniuDB()
         __pre_investment = db.get_list(query_get_pre_investments(status, limit))
-        print("__pre_investment", __pre_investment)
         values = []
         for row in __pre_investment:
             row_values = []
