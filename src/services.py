@@ -3,7 +3,7 @@ from .investment.queries import query_create_investment, query_get_last_investme
 from .queries import (
     query_contract_update,
     query_get_pre_investments,
-    query_create_disable_preinvestment
+    query_create_disable_preinvestment, query_get_list_pre_investments
 )
 from decimal import Decimal
 from datetime import datetime
@@ -57,6 +57,7 @@ class Reinvestment:
         db = FinniuDB()
         db.update(query_update_is_active_re_investment(uuid, is_active))
         db.close()
+        return 'a'
 
     @classmethod
     def execute_activate_pre_investment(cls, uuid):
@@ -71,6 +72,15 @@ class PreInvestment:
         db = FinniuDB()
         __pre_investment = db.get_list(query_get_pre_investments(status, limit))
         db.close()
+        return __pre_investment
+
+    @classmethod
+    def execute_get_list_pre_investment(cls, uuid_list):
+        db = FinniuDB()
+        uuid_str = ', '.join(f"'{uuid}'" for uuid in uuid_list)
+        __list_pre_investment = db.get_list(query_get_list_pre_investments(uuid_str))
+        db.close()
+        return __list_pre_investment
 
     @classmethod
     def execute(cls, status, limit):
