@@ -50,6 +50,7 @@ def query_get_list_pre_investments(uuid_str):
           "public"."investment_preinvestment"."amount" AS "amount",
           "public"."investment_preinvestment"."is_investment" AS "is_investment",
           "public"."investment_preinvestment"."currency" AS "currency",
+          "public"."investment_preinvestment"."contract" AS "contract",
           "public"."investment_preinvestment"."operation_code" AS "operation_code",
           "public"."investment_preinvestment"."action_status" AS "action_status",
           "Onboarding Plan - Plan"."value" AS "plan_value",
