@@ -54,6 +54,7 @@ def activate_re_investments(event, context):
                         "deadline": str(investment['deadline_value']) + " meses",
                         "investment_start_date": datetime.now(timezone.utc).strftime("%d/%m/%Y"),
                         "rentability": str(investment['profitability_percent']),
+                        "contract_url": str(investment['contract']),
                     }
                 }
                 to_emails_fields.append(mailer_template_data)
@@ -100,7 +101,7 @@ def send_mail_reinvestment(event, context):
         logger.info("Error in send_mail", str(e))
 
 
-if __name__ == "__main__":
-    event = {}
-    context = {}
-    activate_re_investments(event, context)
+# if __name__ == "__main__":
+#     event = {}
+#     context = {}
+#     activate_re_investments(event, context)
