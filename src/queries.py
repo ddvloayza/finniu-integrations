@@ -22,9 +22,8 @@ def query_get_pre_investments(status, limit):
         LIMIT {limit}
     """
 
-def query_create_disable_preinvestment(
-        data
-):
+
+def query_create_disable_preinvestment(data):
     return f"""
         INSERT INTO investment_disablepreinvestment (
             uuid,
@@ -38,6 +37,7 @@ def query_create_disable_preinvestment(
             is_active
         ) VALUES {', '.join(data)}
     """
+
 
 def query_get_list_pre_investments(uuid_str):
     print("uuid_str", uuid_str)

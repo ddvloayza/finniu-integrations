@@ -1,6 +1,11 @@
-
-
-def query_create_investment(uuid, operation_code, pre_investment_id, start_investment, end_investment, created_at):
+def query_create_investment(
+    uuid,
+    operation_code,
+    pre_investment_id,
+    start_investment,
+    end_investment,
+    created_at,
+):
     return f"""
         INSERT INTO investment_investment (
             uuid,
@@ -22,6 +27,8 @@ def query_create_investment(uuid, operation_code, pre_investment_id, start_inves
             TRUE
         )
     """
+
+
 def query_get_last_investments(limit):
     return f"""
         SELECT operation_code

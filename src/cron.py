@@ -7,10 +7,7 @@
 
 
 def handler(event, context):
-    print('start cron job')
-    print(f'event: {event}')
-    print(f'context: {context}')
+    print("start cron job")
+    print(f"event: {event}")
+    print(f"context: {context}")
     return
-
-
-
