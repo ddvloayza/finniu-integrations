@@ -11,10 +11,10 @@ logger = logging.getLogger(__name__)
 
 class SendgridMail:
     def __init__(self):
-        self.sg = sendgrid.SendGridAPIClient(api_key=os.environ['SENDGRID_API_KEY'])
-        print("self.sg ", os.environ['SENDGRID_API_KEY'])
-        self.DEFAULT_FROM_EMAIL = 'hola@finniu.com'
-        self.DEFAULT_FROM_NAME = 'Finniu App'
+        self.sg = sendgrid.SendGridAPIClient(api_key=os.environ["SENDGRID_API_KEY"])
+        print("self.sg ", os.environ["SENDGRID_API_KEY"])
+        self.DEFAULT_FROM_EMAIL = "hola@finniu.com"
+        self.DEFAULT_FROM_NAME = "Finniu App"
 
     @classmethod
     def build_email(cls, email):

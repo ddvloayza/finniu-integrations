@@ -3,7 +3,9 @@ from src.services import PreInvestment, Reinvestment, Investment
 import logging
 import uuid
 from datetime import datetime, timezone
+
 logger = logging.getLogger()
+
 
 def draft_pre_investments(event, context):
     success = False
@@ -25,9 +27,15 @@ def activate_re_investments(event, context):
         to_emails_fields = []
         if list_re_investments:
             for re_investment in list_re_investments:
-                Reinvestment.execute_update_active_re_investment(re_investment['uuid'], True)
-                Reinvestment.execute_activate_pre_investment(re_investment['new_pre_investment_id'])
-                __operation_code = Investment.execute_get_last_investments(1)[0]['operation_code']
+                Reinvestment.execute_update_active_re_investment(
+                    re_investment["uuid"], True
+                )
+                Reinvestment.execute_activate_pre_investment(
+                    re_investment["new_pre_investment_id"]
+                )
+                __operation_code = Investment.execute_get_last_investments(1)[0][
+                    "operation_code"
+                ]
                 logger.info("***__operation_code", __operation_code)
                 prefix = "INV"
                 number = int(__operation_code[3:]) + 1
@@ -35,27 +43,37 @@ def activate_re_investments(event, context):
                 Investment.execute_create_investment(
                     str(uuid.uuid4()),
                     new_operation_code,
-                    re_investment['new_pre_investment_id'],
-                    re_investment['start_re_investment'],
-                    re_investment['end_re_investment'],
+                    re_investment["new_pre_investment_id"],
+                    re_investment["start_re_investment"],
+                    re_investment["end_re_investment"],
                     datetime.now(timezone.utc),
                 )
-                list_new_pre_investments_uuids.append(re_investment['new_pre_investment_id'])
-            list_new_pre_investments = PreInvestment.execute_get_list_pre_investment(list_new_pre_investments_uuids)
+                list_new_pre_investments_uuids.append(
+                    re_investment["new_pre_investment_id"]
+                )
+            list_new_pre_investments = PreInvestment.execute_get_list_pre_investment(
+                list_new_pre_investments_uuids
+            )
             print("list_new_pre_investments", list_new_pre_investments)
 
             for investment in list_new_pre_investments:
-                currency_symbol = "S/. " if investment['currency'] == 'nuevo sol' else "$ "
+                currency_symbol = (
+                    "S/. " if investment["currency"] == "nuevo sol" else "$ "
+                )
                 mailer_template_data = {
                     "email": investment['email'],
                     "fields": {
-                        "full_name": investment['first_name'] + " " + investment['last_name'],
-                        "amount": currency_symbol + str(investment['amount']),
-                        "deadline": str(investment['deadline_value']) + " meses",
-                        "investment_start_date": datetime.now(timezone.utc).strftime("%d/%m/%Y"),
-                        "rentability": str(investment['profitability_percent']),
-                        "contract_url": str(investment['contract']),
-                    }
+                        "full_name": investment["first_name"]
+                        + " "
+                        + investment["last_name"],
+                        "amount": currency_symbol + str(investment["amount"]),
+                        "deadline": str(investment["deadline_value"]) + " meses",
+                        "investment_start_date": datetime.now(timezone.utc).strftime(
+                            "%d/%m/%Y"
+                        ),
+                        "rentability": str(investment["profitability_percent"]),
+                        "contract_url": str(investment["contract"]),
+                    },
                 }
                 to_emails_fields.append(mailer_template_data)
         params = {
@@ -64,7 +82,9 @@ def activate_re_investments(event, context):
         }
         init_mails = SendgridMail()
         print("to_emails_fields", to_emails_fields)
-        sender_emails = init_mails.send_email(to_emails_fields, params.get("subject"), params.get("template_id"))
+        sender_emails = init_mails.send_email(
+            to_emails_fields, params.get("subject"), params.get("template_id")
+        )
         if sender_emails.status_code == 202:
             print("sender_emails.status_code", sender_emails.status_code)
         logger.info("***list_re_investments", list_re_investments)
@@ -73,18 +93,18 @@ def activate_re_investments(event, context):
         logger.exception("Failed Lambda ***activate_re_investments", e)
     return success
 
-def send_mail_reinvestment(event, context):
 
+def send_mail_reinvestment(event, context):
     try:
         to_emails_fields = [
             {
-                "email": 'ddvloayza@gmail.com',
+                "email": "ddvloayza@gmail.com",
                 "fields": {
-                    "full_name": 'Diego De la vega',
+                    "full_name": "Diego De la vega",
                     "plan_name": "plan de prueba",
                     "amount": 1000,
-                    "currency": 'Nuevos Soles',
-                    "status": 'Pendiente de aprobacion',
+                    "currency": "Nuevos Soles",
+                    "status": "Pendiente de aprobacion",
                 },
             }
         ]
@@ -93,7 +113,9 @@ def send_mail_reinvestment(event, context):
             "subject": "Re Investment Register",
         }
         init_mails = SendgridMail()
-        sender_emails = init_mails.send_email(to_emails_fields, params.get("subject"), params.get("template_id"))
+        sender_emails = init_mails.send_email(
+            to_emails_fields, params.get("subject"), params.get("template_id")
+        )
         if sender_emails.status_code == 202:
             success_send_mail = True
     except Exception as e:
@@ -101,7 +123,7 @@ def send_mail_reinvestment(event, context):
         logger.info("Error in send_mail", str(e))
 
 
-# if __name__ == "__main__":
-#     event = {}
-#     context = {}
-#     activate_re_investments(event, context)
+if __name__ == "__main__":
+    event = {}
+    context = {}
+    activate_re_investments(event, context)

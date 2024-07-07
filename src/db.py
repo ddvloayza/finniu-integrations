@@ -18,6 +18,7 @@ def retry_connection(fn):
                 print("Idle for %s seconds" % (cls._reconnectIdle), e)
                 time.sleep(cls._reconnectIdle)
                 cls.connect()
+
     return wrapper
 
 
@@ -79,7 +80,8 @@ class DB:
     def _execute_values(self, sql, values):
         try:
             psycopg2.extras.execute_values(
-                self.cursor, sql, values, template=None, page_size=len(values))
+                self.cursor, sql, values, template=None, page_size=len(values)
+            )
             self.conn.commit()
         except Exception as e:
             logging.exception(e)
@@ -91,8 +93,8 @@ class DB:
 
 
 class FinniuDB(DB):
-    database = os.environ['FINNIU_DB']
-    user = os.environ['FINNIU_USERNAME']
-    password = os.environ['FINNIU_PASSWORD']
-    host = os.environ['FINNIU_HOST']
-    port = os.environ['FINNIU_PORT']
+    database = os.environ["FINNIU_DB"]
+    user = os.environ["FINNIU_USERNAME"]
+    password = os.environ["FINNIU_PASSWORD"]
+    host = os.environ["FINNIU_HOST"]
+    port = os.environ["FINNIU_PORT"]
