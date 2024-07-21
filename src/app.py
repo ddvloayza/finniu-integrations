@@ -1,12 +1,12 @@
+import os
+
+import boto3
+import pdfkit
 import serverless_wsgi
 from flask import Flask, jsonify, request
-import pdfkit
-import boto3
-import os
-from .services import ContractUpdate
-from .utils import generate_random_letter, date_string
-from .services import PreInvestment
 
+from .services import ContractUpdate, PreInvestment
+from .utils import date_string, generate_random_letter
 
 s3_client = boto3.client(
     "s3",

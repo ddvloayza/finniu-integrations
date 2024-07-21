@@ -4,7 +4,7 @@ def query_create_investment(
     pre_investment_id,
     start_investment,
     end_investment,
-    created_at
+    created_at,
 ):
     return f"""
         INSERT INTO investment_investment (

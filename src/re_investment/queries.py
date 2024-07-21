@@ -27,7 +27,7 @@ def query_update_is_active_re_investment(uuid, is_active):
 def query_activate_pre_investment(uuid):
     return f"""
         UPDATE investment_preinvestment
-        SET status = 'active'
+        SET status = 'active', is_investment = TRUE
         WHERE investment_preinvestment.uuid = '{uuid}'
         AND investment_preinvestment.is_active = TRUE
     """

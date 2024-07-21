@@ -1,8 +1,9 @@
-from src.integrations.sengrid import SendgridMail
-from src.services import PreInvestment, Reinvestment, Investment
 import logging
 import uuid
 from datetime import datetime, timezone
+
+from src.integrations.sengrid import SendgridMail
+from src.services import Investment, PreInvestment, Reinvestment
 
 logger = logging.getLogger()
 
@@ -61,7 +62,7 @@ def activate_re_investments(event, context):
                     "S/. " if investment["currency"] == "nuevo sol" else "$ "
                 )
                 mailer_template_data = {
-                    "email": investment['email'],
+                    "email": investment["email"],
                     "fields": {
                         "full_name": investment["first_name"]
                         + " "
