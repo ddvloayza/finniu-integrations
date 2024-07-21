@@ -1,10 +1,10 @@
-from functools import wraps
 import logging
+import os
 import time
+from functools import wraps
 
 import psycopg2
 import psycopg2.extras
-import os
 
 
 def retry_connection(fn):

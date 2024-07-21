@@ -1,20 +1,17 @@
-from .db import FinniuDB
-from .investment.queries import query_create_investment, query_get_last_investments
-from .queries import (
-    query_contract_update,
-    query_get_pre_investments,
-    query_create_disable_preinvestment,
-    query_get_list_pre_investments,
-)
-from decimal import Decimal
-from datetime import datetime
 import uuid
+from datetime import datetime
+from decimal import Decimal
 
-from .re_investment.queries import (
-    query_get_re_investments,
-    query_activate_pre_investment,
-    query_update_is_active_re_investment,
-)
+from .db import FinniuDB
+from .investment.queries import (query_create_investment,
+                                 query_get_last_investments)
+from .queries import (query_contract_update,
+                      query_create_disable_preinvestment,
+                      query_get_list_pre_investments,
+                      query_get_pre_investments)
+from .re_investment.queries import (query_activate_pre_investment,
+                                    query_get_re_investments,
+                                    query_update_is_active_re_investment)
 
 
 class ContractUpdate:
