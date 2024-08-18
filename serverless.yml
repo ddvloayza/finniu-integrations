@@ -47,7 +47,11 @@ functions:
     handler: src.functions.activate_re_investments
     events:
       - schedule: cron(0 5 * * ? *)
-  draftCron:
-    handler: src.functions.draft_pre_investments
+  dailyCronClosedInvestments:
+    handler: src.functions.closed_investments
+    events:
+      - schedule: cron(0 5 * * ? *)
+  dailyCronReminderReinvestment:
+    handler: src.functions.send_mail_reinvestment
     events:
       - schedule: cron(0 5 * * ? *)

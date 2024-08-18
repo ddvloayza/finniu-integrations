@@ -245,7 +245,7 @@ def send_mail_inversionistas(event, context):
     )
 
 
-if __name__ == "__main__":
-    event = {}
-    context = {}
-    closed_investments(event, context)
+# if __name__ == "__main__":
+#     event = {}
+#     context = {}
+#     closed_investments(event, context)
