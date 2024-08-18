@@ -5,7 +5,7 @@ import os
 from typing import List, Optional
 
 import sendgrid
-
+from sendgrid.helpers.mail import Mail
 logger = logging.getLogger(__name__)
 
 

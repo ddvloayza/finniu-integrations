@@ -46,8 +46,8 @@ functions:
   dailyCronReinvestment:
     handler: src.functions.activate_re_investments
     events:
-      - schedule: cron(0 0 * * ? *)
+      - schedule: cron(0 5 * * ? *)
   draftCron:
     handler: src.functions.draft_pre_investments
     events:
-      - schedule: cron(0 0 * * ? *)
+      - schedule: cron(0 5 * * ? *)
