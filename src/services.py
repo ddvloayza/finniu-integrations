@@ -2,9 +2,11 @@ import uuid
 from datetime import datetime
 from decimal import Decimal
 
+from .customuser.queries import query_get_users
 from .db import FinniuDB
 from .investment.queries import (query_create_investment,
-                                 query_get_last_investments)
+                                 query_get_last_investments, query_get_finish_investments, query_get_closed_investments,
+                                 query_set_status_pre_investment)
 from .queries import (query_contract_update,
                       query_create_disable_preinvestment,
                       query_get_list_pre_investments,
@@ -31,6 +33,7 @@ class Investment:
         pre_investment_id,
         start_investment,
         end_investment,
+        payment_capital,
         created_at,
     ):
         db = FinniuDB()
@@ -41,6 +44,7 @@ class Investment:
                 pre_investment_id,
                 start_investment,
                 end_investment,
+                payment_capital,
                 created_at,
             )
         )
@@ -53,12 +57,34 @@ class Investment:
         db.close()
         return __investments
 
+    @classmethod
+    def execute_get_finish_investments(cls, limit, days_until_end):
+        db = FinniuDB()
+        __investments = db.get_list(query_get_finish_investments(limit, days_until_end))
+        db.close()
+        return __investments
+
+    @classmethod
+    def execute_get_closed_investments(cls, limit):
+        db = FinniuDB()
+        __investments = db.get_list(query_get_closed_investments(limit))
+        db.close()
+        return __investments
+
+    @classmethod
+    def execute_change_status_investments(cls, uuid, status):
+        db = FinniuDB()
+        __investments = db.update(query_set_status_pre_investment(uuid, status))
+        db.close()
+        return __investments
+
 
 class Reinvestment:
     @classmethod
     def execute_get_end_reinvestment(cls, limit):
         db = FinniuDB()
         __re_investments = db.get_list(query_get_re_investments(limit))
+        print("re_investments", __re_investments)
         db.close()
         return __re_investments
 
@@ -117,3 +143,12 @@ class PreInvestment:
             values.append(f"({', '.join(row_values)})")
         db.insert(query_create_disable_preinvestment(values))
         db.close()
+
+
+class CustomUser:
+    @classmethod
+    def execute_query_get_users(cls, emails_str, limit):
+        db = FinniuDB()
+        __list_users = db.get_list(query_get_users(emails_str, limit))
+        db.close()
+        return __list_users
