@@ -45,6 +45,8 @@ def build_pdf():
         Key=filename_key,
         ACL="public-read",
     )
+    print("uuid", uuid)
+    print("file_url", file_url)
     ContractUpdate.execute(uuid, file_url)
     return jsonify(message="success", url=file_url)
 
