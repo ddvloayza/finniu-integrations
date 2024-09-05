@@ -139,8 +139,7 @@ def query_get_closed_investments(limit):
         LEFT JOIN "public"."onboarding_deadline" AS "deadline" ON "pre_investment"."deadline_id" = "deadline"."uuid"
         LEFT JOIN "public"."onboarding_plan" AS "plan" ON "pre_investment"."plan_id" = "plan"."uuid"
         WHERE
-          DATE("public"."investment_investment"."payment_capital") = CURRENT_DATE
-          AND "pre_investment"."action_status" = 're_inversion_default'
+          DATE("public"."investment_investment"."payment_capital") <= CURRENT_DATE
           AND "pre_investment"."status" = 'active'
           AND "pre_investment"."is_investment" = True
         LIMIT {limit};

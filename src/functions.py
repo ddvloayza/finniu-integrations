@@ -25,45 +25,46 @@ def closed_investments(event, context):
         list_investments = Investment.execute_get_closed_investments(
             100
         )
-        print("list_investments", list_investments)
+        print("execute_get_closed_investments", list_investments)
         to_emails_fields = []
-        for investment in list_investments:
-            finish_investment = Investment.execute_change_status_investments(
-                investment["pre_investment__uuid"], "finished"
-            )
-            print("finish_investment", finish_investment)
-            currency_symbol = (
-                "S/. " if investment["pre_investment__currency"] == "nuevo sol" else "$ "
-            )
-            mailer_template_data = {
-                "email": investment["custom_user__email"],
-                "fields": {
-                    "full_name": investment["user_profile__first_name"]
-                                 + " "
-                                 + investment["user_profile__last_name"],
-                    "amount": currency_symbol + str(investment["pre_investment__amount"]),
-                    "deadline": str(investment["deadline__value"]) + " meses",
-                    "investment_start_date": investment["start_investment"].strftime(
-                        "%d/%m/%Y"
-                    ),
-                    "investment_payment_capital_date": investment["payment_capital"].strftime(
-                        "%d/%m/%Y"
-                    ),
-                    "rentability": str(investment["percentage"]),
-                },
+        if list_investments:
+            for investment in list_investments:
+                finish_investment = Investment.execute_change_status_investments(
+                    investment["pre_investment__uuid"], "finished"
+                )
+                print("finish_investment", finish_investment)
+                currency_symbol = (
+                    "S/. " if investment["pre_investment__currency"] == "nuevo sol" else "$ "
+                )
+                mailer_template_data = {
+                    "email": "ddvloayza@gmail.com",
+                    "fields": {
+                        "full_name": investment["user_profile__first_name"]
+                                     + " "
+                                     + investment["user_profile__last_name"],
+                        "amount": currency_symbol + str(investment["pre_investment__amount"]),
+                        "deadline": str(investment["deadline__value"]) + " meses",
+                        "investment_start_date": investment["start_investment"].strftime(
+                            "%d/%m/%Y"
+                        ),
+                        "investment_payment_capital_date": investment["payment_capital"].strftime(
+                            "%d/%m/%Y"
+                        ),
+                        "rentability": str(investment["percentage"]),
+                    },
+                }
+                to_emails_fields.append(mailer_template_data)
+            params = {
+                "template_id": "d-8f3d8dd38e864bfeba46a4956a2f2517",
+                "subject": "Finalizacion de Inversion",
             }
-            to_emails_fields.append(mailer_template_data)
-        params = {
-            "template_id": "d-8f3d8dd38e864bfeba46a4956a2f2517",
-            "subject": "Finalizacion de Inversion",
-        }
-        init_mails = SendgridMail()
-        sender_emails = init_mails.send_email(
-            to_emails_fields, params.get("subject"), params.get("template_id")
-        )
-        print("sender_emails", sender_emails)
-        logger.info("list_investments", list_investments)
-        success = True
+            init_mails = SendgridMail()
+            sender_emails = init_mails.send_email(
+                to_emails_fields, params.get("subject"), params.get("template_id")
+            )
+            print("sender_emails", sender_emails)
+            logger.info("list_investments", list_investments)
+            success = True
     except Exception as e:
         logger.exception("Failed Lambda ***purge_pre_investments", e)
     return success
@@ -157,12 +158,15 @@ def send_mail_reinvestment(event, context):
         list_investments_1 = Investment.execute_get_finish_investments(
             100, 1
         )
+        print("list_investments_1", list_investments_1)
         list_investments_3 = Investment.execute_get_finish_investments(
             100, 3
         )
+        print("list_investments_3", list_investments_3)
         list_investments_5 = Investment.execute_get_finish_investments(
             100, 5
         )
+        print("list_investments_5", list_investments_5)
         list_investments = list_investments_1 + list_investments_3 + list_investments_5
         print("list_investments", list_investments)
         to_emails_fields = []
@@ -209,7 +213,7 @@ def send_mail_reinvestment(event, context):
 def send_mail_inversionistas(event, context):
 
 
-    list_emails = ['ddvloayza@gmail.com', 'olenkanajera@gmail.com']
+    list_emails = ['ddvloayza@gmail.com', 'josecarlos.ramos@finniu.com', 'luciobustamantemg@gmail.com']
     # no_estan_en_lista_2 = [email for email in list_emails if email not in list_emails2]
     # no_estan_en_lista_1 = [email for email in list_emails2 if email not in list_emails]
     #
@@ -217,7 +221,7 @@ def send_mail_inversionistas(event, context):
     # print("no_estan_en_lista_1", no_estan_en_lista_1)
     emails_str = ", ".join([f"'{email}'" for email in list_emails])
     list_users = CustomUser.execute_query_get_users(
-        emails_str, 1000
+        emails_str, 3
     )
     print("list_users", list_users)
     to_emails_fields = []
@@ -225,19 +229,19 @@ def send_mail_inversionistas(event, context):
         mailer_template_data = {
             "email": users["email"],
             "fields": {
-                "full_name": "Olenka Jael Nájera Gálvez",
-                "investment_start_date": "09 de Agosto del 2024",
-                "amount": "S/. 14,000.00",
+                "full_name": "Lucio Renato Bustamante Murguia",
+                "amount": "S/. 20,000.00",
                 "deadline": "12 meses",
-                "rentability": "18"
+                "rentability": "24%",
+                "payment_capital": "30-08-2024"
             },
         }
         to_emails_fields.append(mailer_template_data)
 
 
     params = {
-        "template_id": "d-d543e94efac241f9b3cf317840d48492",
-        "subject": "Finalizacion de Contrato",
+        "template_id": "d-5cfe8ce6ff214007a2c654eced82c6f1",
+        "subject": "Solicitud de Devolucion",
     }
     init_mails = SendgridMail()
     sender_emails = init_mails.send_email(
@@ -245,7 +249,7 @@ def send_mail_inversionistas(event, context):
     )
 
 
-# if __name__ == "__main__":
-#     event = {}
-#     context = {}
-#     closed_investments(event, context)
+if __name__ == "__main__":
+    event = {}
+    context = {}
+    closed_investments(event, context)
