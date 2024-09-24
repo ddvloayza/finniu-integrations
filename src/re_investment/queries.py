@@ -12,6 +12,7 @@ def query_get_re_investments(limit):
             LEFT JOIN investment_preinvestment AS "Old Pre Investment" ON investment_reinvestment.old_pre_investment_id = "Old Pre Investment"."uuid"
                 LEFT JOIN onboarding_deadline AS "deadline" ON "New Pre Investment".deadline_id = "deadline"."uuid"
         WHERE investment_reinvestment.is_active = FALSE
+            AND "New Pre Investment".status == 'pending'
             AND investment_reinvestment.start_re_investment <= CURRENT_DATE
             AND "Old Pre Investment"."action_status" = 're_inversion_activada'
         LIMIT {limit}
