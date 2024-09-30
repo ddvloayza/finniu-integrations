@@ -147,7 +147,7 @@ def activate_re_investments(event, context):
         logger.info("***list_re_investments", list_re_investments)
         success = True
     except Exception as e:
-        logger.exception("Failed Lambda ***activate_re_investments", e)
+        logger.exception("Failed Lambda ***activate_re_investments")
     return success
 
 
