@@ -118,7 +118,7 @@ def activate_re_investments(event, context):
                     "S/. " if investment["currency"] == "nuevo sol" else "$ "
                 )
                 mailer_template_data = {
-                    "email": "ddvloayza@gmail.com",
+                    "email": investment["email"],
                     "fields": {
                         "full_name": investment["first_name"]
                         + " "
@@ -213,7 +213,9 @@ def send_mail_reinvestment(event, context):
 def send_mail_inversionistas(event, context):
 
 
-    list_emails = ['ddvloayza@gmail.com', 'josecarlos.ramos@finniu.com', 'luciobustamantemg@gmail.com']
+    list_emails = [
+        'pgonzales@cipsa.com.pe',
+    ]
     # no_estan_en_lista_2 = [email for email in list_emails if email not in list_emails2]
     # no_estan_en_lista_1 = [email for email in list_emails2 if email not in list_emails]
     #
@@ -221,7 +223,7 @@ def send_mail_inversionistas(event, context):
     # print("no_estan_en_lista_1", no_estan_en_lista_1)
     emails_str = ", ".join([f"'{email}'" for email in list_emails])
     list_users = CustomUser.execute_query_get_users(
-        emails_str, 3
+        emails_str, 100
     )
     print("list_users", list_users)
     to_emails_fields = []
@@ -229,19 +231,20 @@ def send_mail_inversionistas(event, context):
         mailer_template_data = {
             "email": users["email"],
             "fields": {
-                "full_name": "Lucio Renato Bustamante Murguia",
-                "amount": "S/. 20,000.00",
-                "deadline": "12 meses",
-                "rentability": "24%",
-                "payment_capital": "30-08-2024"
+                "full_name": "Pedro Angel Gonzales Pucuhuayla",
+                "investment_start_date": "12/09/2024",
+                "amount": "$ 4080.00",
+                "deadline": "6 meses",
+                "rentability": "5.00",
+                "contract_url": "https://finniu-contracts.s3.us-east-2.amazonaws.com/2024-09-11/pedro-angel-gonzales-pucuhuayla-577d5584-7259-4654-85a9-8be205f98e8a-zlmd.pdf"
             },
         }
         to_emails_fields.append(mailer_template_data)
 
 
     params = {
-        "template_id": "d-5cfe8ce6ff214007a2c654eced82c6f1",
-        "subject": "Solicitud de Devolucion",
+        "template_id": "d-d543e94efac241f9b3cf317840d48492",
+        "subject": "Invitación para una entrevista",
     }
     init_mails = SendgridMail()
     sender_emails = init_mails.send_email(
@@ -252,4 +255,4 @@ def send_mail_inversionistas(event, context):
 # if __name__ == "__main__":
 #     event = {}
 #     context = {}
-#     activate_re_investments(event, context)
+#     send_mail_inversionistas(event, context)
